@@ -8,6 +8,8 @@
 
         public string Description { get; set; } = string.Empty;
 
+        public ICollection<Person> Actors { get; set; } = [];
+
         public string Language { get; set; } = string.Empty;
 
         public DateTime ReleaseDate { get; set; }
