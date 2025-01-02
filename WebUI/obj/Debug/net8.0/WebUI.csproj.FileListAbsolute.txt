@@ -145,3 +145,4 @@ D:\Movie Application Fullstack\WebUI\bin\Debug\net8.0\runtimes\win\lib\net6.0\Sy
 D:\Movie Application Fullstack\WebUI\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Movie Application Fullstack\WebUI\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\Movie Application Fullstack\WebUI\obj\Debug\net8.0\WebUI.sourcelink.json
+D:\Movie Application Fullstack\WebUI\bin\Debug\net8.0\AutoMapper.dll

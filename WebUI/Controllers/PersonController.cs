@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebUI.Context;
 using WebUI.Entities;
@@ -11,9 +12,11 @@ namespace WebUI.Controllers
     public class PersonController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public PersonController(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public PersonController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -25,14 +28,8 @@ namespace WebUI.Controllers
             try
             {
                 var actorCount = _context.Person.Count();
-                var actorList = _context.Person.Skip(pageIndex * pageSize).Take(pageSize)
-                    .Select(x => new ActorViewModel
-                    {
-                        Id = x.Id,
-                        Name = x.Name, 
-                        DateOfBirth = x.DateOfBirth
-                    })
-                    .ToList();
+                var actorList = _mapper.Map<List<ActorViewModel>>(_context.Person.Skip(pageIndex * pageSize)
+                    .Take(pageSize).ToList());
 
                 response.Status = true;
                 response.Message = "Success";
@@ -88,9 +85,35 @@ namespace WebUI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("Search/{searchText}")]
+        public IActionResult Search(string searchText)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var personSearch = _context.Person.Where(x => x.Name.Contains(searchText)).Select(x => new
+                {
+                    x.Id,
+                    x.Name
+                }).ToList();
+
+                response.Status = true;
+                response.Message = "Search Successfully!";
+                response.Data = personSearch;
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
+        }
+
         [HttpPost]
         [Route("Create")]
-        public IActionResult CreateNewMovie(ActorViewModel model)
+        public IActionResult CreateNewPerson(ActorViewModel model)
         {
             var response = new BaseResponse();
             try
@@ -120,6 +143,82 @@ namespace WebUI.Controllers
                     response.Data = ModelState;
                     return BadRequest(response);
                 }
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPut]
+        [Route("Update")]
+        public IActionResult UpdatePerson(ActorViewModel model)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if(model.Id <= 0)
+                    {
+                        response.Status = false;
+                        response.Message = "Person is not exist!";
+                        return BadRequest(response);
+                    }
+                    var personUpdate = _mapper.Map<Person>(model);
+                    var personDetail = _context.Person.Where(m => m.Id == model.Id).AsNoTracking().FirstOrDefault();
+                    if(personDetail == null)
+                    {
+                        response.Status = false;
+                        response.Message = "Person is not exist!";
+                        return BadRequest(response);
+                    }
+
+                    _context.Person.Update(personUpdate);
+                    _context.SaveChanges();
+                    response.Status = true;
+                    response.Message = "Updated Successfully!";
+                    response.Data = personUpdate;
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Status = false;
+                    response.Message = "Validation Failed!";
+                    response.Data = ModelState;
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public IActionResult DeletePersion(int id)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var person = _context.Person.Where(x => x.Id == id).FirstOrDefault();
+                if (person == null)
+                {
+                    response.Status = false;
+                    response.Message = "Person is not exist!";
+                    return BadRequest(response);
+                }
+                _context.Person.Remove(person);
+                _context.SaveChanges();
+
+                response.Status = true;
+                response.Message = "Deleted Successfully!";
+                return Ok(response);
             }
             catch (Exception ex)
             {

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "xCBFasDbTUGtgPQksgBH1IvY061vgdC+QWEPnDRPYbl3M3PLQOT3d3oYV4QYzFSI0jlvJNYjy6gAWt++2TlQ4g==",
+  "dgSpecHash": "h/p1dMOVTfEqm8t6+PW9rtqnGla1RrrT/BBA8KE2GtSXQ911xTK3q7csR3IlYVUTt6JomYnxXssANkLK1Twyeg==",
   "success": true,
   "projectFilePath": "D:\\Movie Application Fullstack\\WebUI\\WebUI.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\FTC Laptop\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\FTC Laptop\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\FTC Laptop\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\FTC Laptop\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
